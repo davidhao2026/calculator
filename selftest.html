@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculator Self Test</title>
+  <style>
+    body{font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; padding:16px;}
+    .ok{color:#0a7d2a}
+    .bad{color:#b00020}
+    code{background:#f4f4f6; padding:2px 6px; border-radius:6px}
+  </style>
+</head>
+<body>
+  <h1>Self Test</h1>
+  <p>用于快速验证核心逻辑（表达式计算 + 进制转换）。</p>
+  <div id="out"></div>
+
+  <script src="core.js"></script>
+  <script>
+    const out = document.getElementById('out');
+
+    function addLine(ok, text){
+      const div = document.createElement('div');
+      div.className = ok ? 'ok' : 'bad';
+      div.textContent = (ok ? 'PASS: ' : 'FAIL: ') + text;
+      out.appendChild(div);
+    }
+
+    function eq(actual, expected){
+      return String(actual) === String(expected);
+    }
+
+    const tests = [
+      () => ({name: '1+2*3 = 7', ok: eq(CalculatorCore.evaluateExpression('1+2*3'), '7')}),
+      () => ({name: '(1+2)*3 = 9', ok: eq(CalculatorCore.evaluateExpression('(1+2)*3'), '9')}),
+      () => ({name: 'sqrt(9) = 3', ok: eq(CalculatorCore.evaluateExpression('sqrt(9)'), '3')}),
+      () => ({name: '50% = 0.5', ok: eq(CalculatorCore.evaluateExpression('50%'), '0.5')}),
+      () => ({name: '200*10% = 20', ok: eq(CalculatorCore.evaluateExpression('200*10%'), '20')}),
+      () => {
+        const r = CalculatorCore.convertInteger('0b1010', 'auto');
+        return {name: '0b1010 -> dec 10', ok: r.dec === '10' && r.hex === '0xA'};
+      },
+      () => {
+        const r = CalculatorCore.convertInteger('2A', 16);
+        return {name: '16: 2A -> dec 42', ok: r.dec === '42' && r.bin === '0b101010'};
+      },
+      () => {
+        const r = CalculatorCore.convertInteger('-42', 10);
+        return {name: '-42 -> bin/hex 带负号', ok: r.bin === '-0b101010' && r.hex === '-0x2A'};
+      },
+    ];
+
+    let pass = 0;
+    for (const t of tests) {
+      try {
+        const r = t();
+        addLine(r.ok, r.name);
+        if (r.ok) pass++;
+      } catch (e) {
+        addLine(false, (e && e.message) ? e.message : String(e));
+      }
+    }
+
+    const summary = document.createElement('h2');
+    summary.textContent = `Summary: ${pass}/${tests.length} passed`;
+    out.prepend(summary);
+  </script>
+</body>
+</html>

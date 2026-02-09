@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>网页计算器</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div>
+        <h1 class="title">网页计算器</h1>
+        <p class="subtitle">支持基础运算、平方根、百分比，以及二/十/十六进制转换</p>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="功能切换">
+        <button class="tab is-active" id="tab-calculator" role="tab" aria-selected="true" aria-controls="panel-calculator">计算器</button>
+        <button class="tab" id="tab-converter" role="tab" aria-selected="false" aria-controls="panel-converter">进制转换</button>
+      </nav>
+    </header>
+
+    <main class="panels">
+      <section class="panel is-active" id="panel-calculator" role="tabpanel" aria-labelledby="tab-calculator">
+        <div class="calc">
+          <div class="display" aria-label="显示屏">
+            <div class="expression" id="expression" title="表达式"></div>
+            <div class="result" id="result" title="结果">0</div>
+          </div>
+
+          <div class="keypad" aria-label="计算器按键">
+            <button class="key key--fn" data-action="clear" title="清空 (Esc)">C</button>
+            <button class="key key--fn" data-action="backspace" title="退格 (Backspace)">⌫</button>
+            <button class="key key--fn" data-action="sqrt" title="平方根">√</button>
+            <button class="key key--op" data-value="/" title="除">÷</button>
+
+            <button class="key" data-value="7">7</button>
+            <button class="key" data-value="8">8</button>
+            <button class="key" data-value="9">9</button>
+            <button class="key key--op" data-value="*" title="乘">×</button>
+
+            <button class="key" data-value="4">4</button>
+            <button class="key" data-value="5">5</button>
+            <button class="key" data-value="6">6</button>
+            <button class="key key--op" data-value="-" title="减">−</button>
+
+            <button class="key" data-value="1">1</button>
+            <button class="key" data-value="2">2</button>
+            <button class="key" data-value="3">3</button>
+            <button class="key key--op" data-value="+" title="加">+</button>
+
+            <button class="key key--fn" data-action="percent" title="百分比">%</button>
+            <button class="key" data-value="0">0</button>
+            <button class="key" data-value="." title="小数点">.</button>
+            <button class="key key--eq" data-action="equals" title="等于 (Enter)">=</button>
+
+            <button class="key key--fn" data-value="(" title="左括号">(</button>
+            <button class="key key--fn" data-value=")" title="右括号">)</button>
+          </div>
+
+          <div class="hint">
+            键盘支持：数字、<span class="kbd">+</span><span class="kbd">-</span><span class="kbd">*</span><span class="kbd">/</span>、括号、<span class="kbd">Enter</span>、<span class="kbd">Backspace</span>、<span class="kbd">Esc</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-converter" role="tabpanel" aria-labelledby="tab-converter">
+        <div class="converter">
+          <div class="converter__row">
+            <label class="label" for="conv-input">输入</label>
+            <input id="conv-input" class="input" inputmode="text" placeholder="例如：1010 / 42 / 0x2a" autocomplete="off" />
+          </div>
+
+          <div class="converter__row">
+            <label class="label" for="conv-base">输入进制</label>
+            <select id="conv-base" class="select">
+              <option value="auto" selected>自动识别 (0b/0x 前缀或纯数字)</option>
+              <option value="2">二进制</option>
+              <option value="10">十进制</option>
+              <option value="16">十六进制</option>
+            </select>
+            <button class="btn" id="conv-convert">转换</button>
+            <button class="btn btn--ghost" id="conv-clear">清空</button>
+          </div>
+
+          <div class="converter__out" aria-label="转换结果">
+            <div class="out">
+              <div class="out__label">二进制</div>
+              <div class="out__value" id="out-bin">—</div>
+            </div>
+            <div class="out">
+              <div class="out__label">十进制</div>
+              <div class="out__value" id="out-dec">—</div>
+            </div>
+            <div class="out">
+              <div class="out__label">十六进制</div>
+              <div class="out__value" id="out-hex">—</div>
+            </div>
+          </div>
+
+          <div class="hint" id="conv-hint">提示：进制转换按“整数”处理；支持负数；支持 <span class="mono">0b</span>/<span class="mono">0x</span> 前缀。</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span class="mono">/</span> 本地静态页面，无需后端
+    </footer>
+  </div>
+
+  <script src="core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
